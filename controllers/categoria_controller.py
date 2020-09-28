@@ -32,14 +32,18 @@ class Categoria_controller:
                 print(f'{str(e)}')
 
     def listar_Categorias(self):
-        print('''
-        ===========================
-            Lista de Categorías
-        ===========================
-        ''')
-        libro = self.categoria.obtener_categorias('id_categoria')
-        print(print_table(libro, ['ID', 'Categoria de Libro']))
-        input("\nPresione una tecla para continuar...")
+        try:
+            print('''
+            ===========================
+                Lista de Categorías
+            ===========================
+            ''')
+            libro = self.categoria.obtener_categorias('id_categoria')
+            print(print_table(libro, ['ID', 'Categoria de Libro']))
+            input("\nPresione una tecla para continuar...")
+        except Exception as e:
+            print(f'Oops! occurred {str(e)}')
+           
 
     def insertar_categoria(self):
         pass

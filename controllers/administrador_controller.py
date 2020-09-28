@@ -1,5 +1,4 @@
 from classes.personas import Persona
-from classes.persona_rol import Persona_rol
 from controllers.libros_controller import Libro_controller
 from controllers.prestamos_controller import Prestamo_controller
 from helpers.helper import input_data, print_table, pregunta
@@ -7,8 +6,7 @@ from helpers.menu import Menu
 
 class Administrador_controller:
     def __init__(self):
-        self.persona = Persona()
-        self.persona_rol = Persona_rol()
+        self.persona = Persona()        
         self.libro_controlador = Libro_controller()
         self.prestamo_controlador = Prestamo_controller()
 
@@ -21,7 +19,7 @@ class Administrador_controller:
                 =============================
                 ''')
                 self.identificar_administrador()
-                menu = ['Mostrar Administradores', "Mostrar Lectores", 'Inscribir personas', "Revisar solicitudes", "Seguimiento de libros prestados", "Salir"]
+                menu = ['Mostrar Administradores', "Mostrar Lectores", 'Inscribir personas', "Revisar solicitudes de préstamo", "Seguimiento de libros prestados", "Mantenimiento de estados de préstamos", "Salir"]
                 respuesta = Menu(menu).show()
                 
                 if respuesta == 1:
@@ -34,6 +32,8 @@ class Administrador_controller:
                     self.prestamo_controlador.revisar_solicitudes()
                 elif respuesta == 5:
                     self.prestamo_controlador.seguimiento_libros()
+                elif respuesta == 6:
+                    pass
                 else:
                     self.salir = True
                     break
@@ -41,7 +41,7 @@ class Administrador_controller:
                 print(f'{str(e)}')
 
     def identificar_administrador(self):
-        #buscas y seleccionas un administrador
+        #buscas y seleccionas un administrador (filtro N° 1 en tipo_rol)
         pass
 
     def listar_administradores(self):
@@ -53,6 +53,6 @@ class Administrador_controller:
         pass
 
     def inscribir_personas(self):
-        #Ingresa persona y luego su rol (dos tablas que ingresar)
+        #Ingresa persona y coloca su rol (1: Administrador y 2: Lector)
         pass
 
