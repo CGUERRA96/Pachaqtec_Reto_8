@@ -1,5 +1,8 @@
 from helpers.menu import Menu
 import pprint
+from controllers.lector_controller import Lector_controller
+from controllers.libros_controller import Libro_controller
+from controllers.administrador_controller import Administrador_controller
 
 def iniciar_app():
     try:
@@ -12,15 +15,24 @@ def iniciar_app():
         respuesta = Menu(menu_principal).show()
         if respuesta == 1:
             
-            pass
+            administrador = Administrador_controller()
+            administrador.menu()
+            if administrador.salir:
+                iniciar_app()
 
         elif respuesta == 2:
             
-            pass
+            lector = Lector_controller()
+            lector.menu()
+            if lector.salir:
+                iniciar_app()
 
         elif respuesta == 3:
             
-            pass
+            libros = Libro_controller()
+            libros.menu()
+            if libros.salir:
+                iniciar_app()
 
         print("\nGracias por utilizar el sistema\n")
     except KeyboardInterrupt:

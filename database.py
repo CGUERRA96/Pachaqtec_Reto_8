@@ -18,10 +18,10 @@ class Database:
         '''
         conn.ejecutar_sentencia(create_table_query)
         
-    def crear_roles(self):
+    def crear_persona_rol(self):
         create_table_query = '''
-            CREATE TABLE IF NOT EXISTS  roles(
-                id_rol  SERIAL  PRIMARY KEY NOT NULL,
+            CREATE TABLE IF NOT EXISTS  persona_rol(
+                id_prol  SERIAL  PRIMARY KEY NOT NULL,
                 tipo_rol varchar(25) NOT NULL,
                 id_persona integer NOT NULL,
                 FOREIGN KEY (id_persona) REFERENCES personas(id_persona)                
@@ -66,7 +66,7 @@ class Database:
                 fecha_devolucion date,
                 estado_prestamo varchar(20) NOT NULL DEFAULT 'pendiente',
                 estado_seguimiento varchar(20),
-                FOREIGN KEY (id_lector) REFERENCES roles(id_rol),
+                FOREIGN KEY (id_lector) REFERENCES persona_rol(id_prol),
                 FOREIGN KEY (id_libro) REFERENCES libros(id_libro)
             );
         '''
@@ -77,7 +77,7 @@ class Database:
 conn = Conexion('sistema_biblioteca')
 db= Database(conn)
 db.crear_persona()
-db.crear_roles()
+db.crear_persona_rol()
 db.crear_categoria_libro()
 db.crear_libros()
 db.crear_prestamo()
