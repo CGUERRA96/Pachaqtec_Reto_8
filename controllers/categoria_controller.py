@@ -16,7 +16,7 @@ class Categoria_controller:
                    Mantenimiento de Categoria
                 ===============================
                 ''')
-                menu = ['Mostrar Categorías', 'Ingresar Categoría', 'Editar Categoría', "Salir"]
+                menu = ['Mostrar Categorías', 'Ingresar Categoría', 'Buscar Categoría', "Salir"]
                 respuesta = Menu(menu).show()
                 
                 if respuesta == 1:
@@ -24,7 +24,13 @@ class Categoria_controller:
                 elif respuesta == 2:
                     self.insertar_categoria()
                 elif respuesta == 3:
-                    self.editar_categoria()               
+
+                    #self.listar_categorias()
+
+                    #id_categoria = input_data("Ingrese el ID de la categoria a modificar >> ", "int")
+
+                    self.buscar_categoria()
+                    
                 else:
                     self.salir = True
                     break
@@ -57,14 +63,36 @@ class Categoria_controller:
         ''')
         self.listar_categorias()
 
+    def buscar_categoria(self):
+        print('''
+        ===========================
+            Buscar Categoria
+        ===========================
+        ''')
+        try:
+            self.listar_categorias()
+            id_categoria = input_data("Ingrese el ID de la categoria >> ", "int")
+            categoria = self.categoria.obtener_categoria({'id_categoria': id_categoria})
+            print(print_table(categoria, ['ID', 'Nombre']))
+
+            if categoria:
+                if pregunta("¿Deseas dar mantenimiento al curso?"):
+                    opciones = ['Editar curso', 'Salir']
+                    respuesta = Menu(opciones).show()
+                    if respuesta == 1:
+                        self.editar_categoria(id_categoria)
+        except Exception as e:
+            print(f'{str(e)}')
+        input("\nPresione una tecla para continuar...")
+
     def editar_categoria(self, id_categoria):
         self.listar_categorias()
         id_categoria = input_data("Ingrese el ID de la categoria a modificar >> ", "int")
         descripcion = input_data("Ingrese la nueva categoria >> ")
         self.categoria.modificar_categoria({
-            'categoria_id': id_categoria
+            'id_categoria': id_categoria
         }, {
-            'descripción': descripcion
+            'descripcion': descripcion
         })
         print('''
         ===========================
