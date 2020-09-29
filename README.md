@@ -11,5 +11,3 @@ Abraham Jhonatan Leiva Calderón.
 ## Lenguaje
 Python
 
-## VirtualEnv
-myenv
