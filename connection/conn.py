@@ -32,6 +32,14 @@ class Conexion:
         self.cursor.execute(query)
         return self.cursor.fetchall()
 
+    def get_by_column_like(self, data):
+        list_select_where = []
+        for field_name, field_value in data.items():
+            list_select_where.append(f"lower({field_name}) like '%{field_value}%'")
+        query = f'SELECT * FROM {self.table_name} WHERE {" AND ".join(list_select_where)}'
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
+
     def close_connection(self):
         self.db.close()
 
