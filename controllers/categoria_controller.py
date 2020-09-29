@@ -20,7 +20,7 @@ class Categoria_controller:
                 respuesta = Menu(menu).show()
                 
                 if respuesta == 1:
-                    self.listar_Categorias()
+                    self.listar_categorias()
                 elif respuesta == 2:
                     self.insertar_categoria()
                 elif respuesta == 3:
@@ -31,7 +31,7 @@ class Categoria_controller:
             except Exception as e:
                 print(f'{str(e)}')
 
-    def listar_Categorias(self):
+    def listar_categorias(self):
         try:
             print('''
             ===========================
@@ -46,7 +46,28 @@ class Categoria_controller:
            
 
     def insertar_categoria(self):
-        pass
+        descripcion = input_data("Ingrese la nueva categoría >> ")
+        self.categoria.guardar_categoria({
+            'descripcion': descripcion
+        })
+        print('''
+        =================================
+            Nueva Categoría Agregada !
+        =================================
+        ''')
+        self.listar_categorias()
 
-    def editar_categoria(self):
-        pass
+    def editar_categoria(self, id_categoria):
+        self.listar_categorias()
+        id_categoria = input_data("Ingrese el ID de la categoria a modificar >> ", "int")
+        descripcion = input_data("Ingrese la nueva categoria >> ")
+        self.categoria.modificar_categoria({
+            'categoria_id': id_categoria
+        }, {
+            'descripción': descripcion
+        })
+        print('''
+        ===========================
+            Categoria Editada !
+        ===========================
+        ''')
