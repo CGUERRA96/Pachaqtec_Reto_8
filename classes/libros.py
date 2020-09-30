@@ -19,7 +19,6 @@ class Libro:
     def buscar_libros_like(self, data_libro):
         return self.model.get_by_column_like(data_libro)
 
-
     def modificar_libros(self, id_libro, data_libro):
         return self.model.update(id_libro, data_libro)
 

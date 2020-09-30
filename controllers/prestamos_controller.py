@@ -16,7 +16,7 @@ class Prestamo_controller:
     def solicitar_libro(self, id_lector_identificado):
         print('Primero busquemos el libro que vas a solicitar >>\n')
         while True:            
-            self.buscar_libros_filtros()
+            self.libro_controlador.buscar_libros_filtros_lector()
             if pregunta(f"¿Encontraste el libro que buscabas?"):
                 id_libro_seleccionado = input_data("Ingresa el ID del libro a solicitar >> ")
                 now = datetime.now()
@@ -39,7 +39,7 @@ class Prestamo_controller:
                     input("\nPresione una tecla para continuar...")
                     break
                    
-    def revisar_solicitudes(self):
+    def revisar_solicitudes(self, id_adminitrador):
         id_estadop = 1
         solicitud_prestamo = self.prestamo.buscar_prestamos({'id_estado_prestamo': id_estadop})
         print('''
@@ -98,7 +98,7 @@ class Prestamo_controller:
             ========================
         ''')
 
-    def seguimiento_libros(self):
+    def seguimiento_libros(self, id_administrador):
         id_estado_a = 2
         seguimiento_prestamo = self.prestamo.buscar_prestamos({'id_estado_prestamo': id_estado_a})
         print('''
@@ -113,21 +113,3 @@ class Prestamo_controller:
 
     def historial_solicitudes_lector(self):
         pass
-
-    def buscar_libros_filtros(self):
-        #libros_1 = self.libros.obtener_libros('id_libro')
-        libros_buscar = {}
-       
-        if pregunta(f"¿Deseas buscar por nombre de libro?"):
-            nombre_libro_0 = input_data("Ingresa el nombre del libro: >> ")
-            libros_buscar['nombre'] = nombre_libro_0
-
-        if pregunta(f"¿Deseas buscar por nombre de autor?"):
-            nombre_autor_0 = input_data("Ingresa el nombre del autor: >> ")
-            libros_buscar['autor'] = nombre_autor_0
-
-        if pregunta(f"¿Deseas buscar por Editorial?"):
-            nombre_editorial_0 = input_data("Ingresa el nombre de la Editorial: >> ")
-            libros_buscar['editorial'] = nombre_editorial_0
-        libros_buscados = self.libros.buscar_libros_like(libros_buscar)
-        print(print_table(libros_buscados,['ID','Nombre libro','Autor','Id_Categoria','Editorial','Año de edición','Stock']))
