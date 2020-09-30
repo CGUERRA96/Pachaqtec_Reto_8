@@ -40,7 +40,7 @@ class Lector_controller:
         # Buscar e identificar al lector (filtro N° 2 en la tabla personas)
         self.administrador_controller.listar_lectores()
 
-        id_lector = input_data("Ingrese el ID del profesor >> ", "int")
+        id_lector = input_data("Ingrese el ID del lector >> ", "int")
         lector = self.persona.obtener_persona({'id_persona': id_lector})
         #print(print_table(lector, ['id_persona', 'dni_persona', 'nombres', 'apellidos', 'correo', 'telefono', 'direccion', 'id_tipo_rol']))
 

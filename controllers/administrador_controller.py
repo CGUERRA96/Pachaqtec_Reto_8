@@ -3,18 +3,20 @@ from controllers.libros_controller import Libro_controller
 from controllers.prestamos_controller import Prestamo_controller
 from helpers.helper import input_data, print_table, pregunta
 from helpers.menu import Menu
+from controllers.estado_prest_controller import Estado_prestamo_controller
 
 class Administrador_controller:
     def __init__(self):
         self.persona = Persona()        
         self.libro_controlador = Libro_controller()
         self.prestamo_controlador = Prestamo_controller()
+        self.estado_prest_controller = Estado_prestamo_controller()
 
     def menu(self):
         print('''
-        =============================
+        ================================
             Bienvenido Administrador
-        =============================
+        ================================
         ''')
         self.identificar_administrador()
         while True:
@@ -36,7 +38,7 @@ class Administrador_controller:
                 elif respuesta == 5:
                     self.prestamo_controlador.seguimiento_libros()
                 elif respuesta == 6:
-                    pass
+                    self.estado_prest_controller.menu()
                 else:
                     self.salir = True
                     break
