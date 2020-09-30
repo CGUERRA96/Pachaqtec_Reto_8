@@ -22,7 +22,7 @@ class Lector_controller:
                 menu = ['Buscar libros', "Solicitar libro", "Historial de solicitudes","Salir"]
                 respuesta = Menu(menu).show()
                 if respuesta == 1:
-                    self.libro_controlador.listar_libros()
+                    self.prestamo_controlador.buscar_libros_filtros()
                 elif respuesta == 2:
                     self.prestamo_controlador.solicitar_libro()
                 elif respuesta == 3:

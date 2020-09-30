@@ -16,8 +16,8 @@ class Prestamos:
     def buscar_prestamos(self, data_prestamo):
         return self.model.get_by_column(data_prestamo)
 
-    def modificar_periodo(self, id_prestamo, data_prestamo):
+    def modificar_prestamo(self, id_prestamo, data_prestamo):
         return self.model.update(id_prestamo, data_prestamo)
 
-    def eliminar_periodo(self, id_periodo):
+    def eliminar_prestamo(self, id_periodo):
         return self.model.delete(id_periodo)
