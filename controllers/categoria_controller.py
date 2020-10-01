@@ -77,7 +77,7 @@ class Categoria_controller:
 
             if categoria:
                 if pregunta("¿Deseas dar mantenimiento al curso?"):
-                    opciones = ['Editar curso', 'Salir']
+                    opciones = ['Editar Categoría', 'Salir']
                     respuesta = Menu(opciones).show()
                     if respuesta == 1:
                         self.editar_categoria(id_categoria)

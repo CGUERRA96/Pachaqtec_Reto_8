@@ -34,7 +34,7 @@ def iniciar_app():
             if libros.salir:
                 iniciar_app()
 
-        print("\nGracias por utilizar el sistema\n")
+        print("\nGracias por utilizar nuestro sistema bibliotecario\n")
     except KeyboardInterrupt:
         print('\n Se interrumpio la aplicación')
     except Exception as e:

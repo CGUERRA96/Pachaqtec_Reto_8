@@ -3,62 +3,67 @@ from controllers.libros_controller import Libro_controller
 from controllers.prestamos_controller import Prestamo_controller
 from helpers.helper import input_data, print_table, pregunta
 from helpers.menu import Menu
+from controllers.estado_prest_controller import Estado_prestamo_controller
 
 class Administrador_controller:
     def __init__(self):
         self.persona = Persona()        
         self.libro_controlador = Libro_controller()
         self.prestamo_controlador = Prestamo_controller()
+        self.estado_prest_controller = Estado_prestamo_controller()
 
     def menu(self):
         print('''
-        =============================
+        ================================
             Bienvenido Administrador
-        =============================
+        ================================
         ''')
-        self.identificar_administrador()
-        #id_admin1 = self.identificar_administrador()
-        while True:
-            try:                
-                print()
+        self.salir = False
+        id_admin1 = self.identificar_administrador()
+        if id_admin1:
+            while True:               
+                try:                
+                    print()
 
-                menu = ['Mostrar Administradores', "Mostrar Lectores", 'Inscribir personas', "Revisar solicitudes de préstamo", "Seguimiento de libros prestados", "Mantenimiento de estados de préstamos", "Salir"]
-                respuesta = Menu(menu).show()
-                
-                if respuesta == 1:
-                    self.listar_administradores()
-                elif respuesta == 2:
-                    self.listar_lectores()
-                elif respuesta == 3:
-                    self.inscribir_personas()
-                elif respuesta == 4:
-                    pass
-                    #self.prestamo_controlador.revisar_solicitudes(id_admin1)
-                elif respuesta == 5:
-                    pass
-                    #self.prestamo_controlador.seguimiento_libros(id_admin1)
-                elif respuesta == 6:
-                    pass
-                else:
-                    self.salir = True
-                    break
-            except Exception as e:
-                print(f'{str(e)}')
+                    menu = ['Mostrar Administradores', "Mostrar Lectores", 'Inscribir personas', "Revisar solicitudes de préstamo", "Seguimiento de libros prestados", "Mantenimiento de estados de préstamos", "Salir"]
+                    respuesta = Menu(menu).show()
+                    
+                    if respuesta == 1:
+                        self.listar_administradores()
+                    elif respuesta == 2:
+                        self.listar_lectores()
+                    elif respuesta == 3:
+                        self.inscribir_personas()
+                    elif respuesta == 4:
+                        self.prestamo_controlador.revisar_solicitudes(id_admin1)
+                    elif respuesta == 5:
+                        self.prestamo_controlador.seguimiento_libros(id_admin1)
+                    elif respuesta == 6:
+                        self.estado_prest_controller.menu()
+                    else:
+                        self.salir = True
+                        break
+                except Exception as e:
+                    print(f'{str(e)}')
 
     def identificar_administrador(self):
         #buscas y seleccionas un administrador (filtro N° 1 en tipo_rol)
-        self.listar_administradores()
-
-        id_admin = input_data("Ingrese el ID del profesor >> ", "int")
-        admin = self.persona.obtener_persona({'id_persona': id_admin})
-        #print(print_table(lector, ['id_persona', 'dni_persona', 'nombres', 'apellidos', 'correo', 'telefono', 'direccion', 'id_tipo_rol']))
-
-        print(f'''
-            ========================================================
-                Bienvenido Administrador : {admin[2]} {admin[3]}
-            ========================================================
-        ''')
-        #return id_admin
+        id_tipo_rol = 1
+        admin_0 = self.persona.buscar_personas({'id_tipo_rol': id_tipo_rol})
+        if admin_0:
+            self.listar_administradores()
+            id_admin = input_data("Ingresa tu ID de Administrador >> ", "int")
+            admin = self.persona.obtener_persona({'id_persona': id_admin})
+            #print(print_table(lector, ['id_persona', 'dni_persona', 'nombres', 'apellidos', 'correo', 'telefono', 'direccion', 'id_tipo_rol']))
+            print(f'''
+                ========================================================
+                    Bienvenido Administrador : {admin[2]} {admin[3]}
+                ========================================================
+            ''')
+            return id_admin
+        else:
+            self.inscribir_personas()
+            
 
     def listar_personas(self):
         print('''

@@ -18,37 +18,43 @@ class Lector_controller:
             Bienvenido Lector
         ========================
         ''')
-        self.identificar_lector()
-        id_lector_1 = self.identificar_lector()   
-        while True:
-            try:
-                print()
-                menu = ['Buscar libros', "Solicitar libro", "Historial de solicitudes","Salir"]
-                respuesta = Menu(menu).show()
-                if respuesta == 1:
-                    self.libro_controlador.buscar_libros_filtros()
-                elif respuesta == 2:
-                    self.prestamo_controlador.solicitar_libro(id_lector_1)
-                elif respuesta == 3:
-                    self.prestamo_controlador.historial_solicitudes_lector()          
-                else:
-                    self.salir = True
-                    break
-            except Exception as e:
-                print(f'{str(e)}')
-
+        id_lector_1 = self.identificar_lector()
+        id_lector_1
+        if id_lector_1:
+            while True:            
+                try:
+                    print()
+                    menu = ['Buscar libros', "Solicitar libro", "Historial de solicitudes","Salir"]
+                    respuesta = Menu(menu).show()
+                    if respuesta == 1:
+                        self.libro_controlador.buscar_libros_filtros_lector()
+                    elif respuesta == 2:
+                        self.prestamo_controlador.solicitar_libro(id_lector_1)
+                    elif respuesta == 3:
+                        self.prestamo_controlador.historial_solicitudes_lector(id_lector_1)          
+                    else:
+                        self.salir = True
+                        break
+                except Exception as e:
+                    print(f'{str(e)}')
+        
     def identificar_lector(self):
         # Buscar e identificar al lector (filtro N° 2 en la tabla personas)
-        self.administrador_controller.listar_lectores()
+        id_tipo_rol = 2
+        lector_0 = self.persona.buscar_personas({'id_tipo_rol': id_tipo_rol})
+        if lector_0:
+            self.administrador_controller.listar_lectores()
+            id_lector = input_data("Ingrese el ID del lector >> ", "int")
+            lector = self.persona.obtener_persona({'id_persona': id_lector})
+            #print(print_table(lector, ['id_persona', 'dni_persona', 'nombres', 'apellidos', 'correo', 'telefono', 'direccion', 'id_tipo_rol']))
 
-        id_lector = input_data("Ingrese el ID del profesor >> ", "int")
-        lector = self.persona.obtener_persona({'id_persona': id_lector})
-        #print(print_table(lector, ['id_persona', 'dni_persona', 'nombres', 'apellidos', 'correo', 'telefono', 'direccion', 'id_tipo_rol']))
+            print(f'''
+                ==================================================
+                    Bienvenido Lector : {lector[2]} {lector[3]}
+                ==================================================
+            ''')
+            return id_lector
+        else:
+            print(f'\n Por favor comunicate con el administrador para que creen tu usuario :')
+            input("\nPresione una tecla para continuar...")
 
-        print(f'''
-            ==================================================
-                Bienvenido Lector : {lector[2]} {lector[3]}
-            ==================================================
-        ''')
-        return id_lector
-    

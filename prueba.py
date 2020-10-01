@@ -8,7 +8,7 @@ today = date.today()
 #Fecha actual
 now = datetime.now()
 
-fecha_ahora = now.strftime("%Y-%m-%d %H:%M")
+fecha_ahora = now.strftime("%d-%m-%y %H:%M")
 
 print(today)
 print(now)

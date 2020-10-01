@@ -1,5 +1,6 @@
 from classes.personas import Persona
 from classes.prestamos  import Prestamos
+from classes.estado_prestamo import Estado_prestamo
 from classes.libros import Libro
 from controllers.libros_controller import Libro_controller
 from helpers.helper import input_data, print_table, pregunta
@@ -11,6 +12,7 @@ class Prestamo_controller:
         self.persona = Persona()
         self.libro_controlador = Libro_controller()
         self.prestamo = Prestamos()
+        self.estado_prest = Estado_prestamo()
         self.libros = Libro()
 
     def solicitar_libro(self, id_lector_identificado):
@@ -20,17 +22,20 @@ class Prestamo_controller:
             if pregunta(f"¿Encontraste el libro que buscabas?"):
                 id_libro_seleccionado = input_data("Ingresa el ID del libro a solicitar >> ")
                 now = datetime.now()
-                fecha_ahora = now.strftime("%Y-%m-%d %H:%M")
+                fecha_ahora = now.strftime("%d-%m-%y %H:%M")
                 self.prestamo.guardar_prestamo({
                     'id_lector'    :   id_lector_identificado,
                     'id_libro'  :   id_libro_seleccionado,
-                    'fecha_solicitud' :   fecha_ahora
+                    'fecha_solicitud' :   fecha_ahora,
+                    'id_estado_prestamo' : 1
                 })
                 print('''
                 ==============================
                     Solicitud creada !!
                 ==============================
                 ''')
+                presentar = self.prestamo.obtener_prestamos('id_lector')
+                print(print_table(presentar))
                 break
             else:
                 if pregunta(f"¿Desea volver a intentar una búsqueda?"):
@@ -39,7 +44,7 @@ class Prestamo_controller:
                     input("\nPresione una tecla para continuar...")
                     break
                    
-    def revisar_solicitudes(self, id_adminitrador):
+    def revisar_solicitudes(self, id_administrador):
         id_estadop = 1
         solicitud_prestamo = self.prestamo.buscar_prestamos({'id_estado_prestamo': id_estadop})
         print('''
@@ -48,10 +53,27 @@ class Prestamo_controller:
                 =============================================
         ''')
         print(print_table(solicitud_prestamo, ['ID', 'Id_Lector', 'Id_Libro', 'Fecha solicitud', 'Id_administrador', 'Fecha prestamo', 'Plazo', 'Fecha devolución', 'Id_estado']))
-
+        id_prest_sol = input_data("Ingrese el ID de la solicitud a revisar >> ")
+        solicitud = self.prestamo.obtener_prestamo({'id_prestamo' : id_prest_sol})
+        print(print_table(solicitud,['ID', 'Id_Lector', 'Id_Libro', 'Fecha solicitud', 'Id_administrador', 'Fecha prestamo', 'Plazo', 'Fecha devolución', 'Id_estado']))
+        if pregunta(f"¿Desea aprobar esta solicitud?"):
+            self.aprobar_solicitud(id_prest_sol, id_administrador)
+            print(f'''
+                =========================================================
+                    Solicitud aprobada con ID : {solicitud[0]}
+                =========================================================
+            ''')
+        else:
+            self.rechazar_solicitud(id_prest_sol, id_administrador)
+            print(f'''
+                =========================================================
+                    Solicitud rechazada con ID: {solicitud[0]}
+                =========================================================
+            ''')
+        
     def aprobar_solicitud(self, id_prestamo, id_administrador):
         hoy = datetime.now()
-        fecha_prest = hoy.strftime("%Y-%m-%d %H:%M")
+        fecha_prest = hoy.strftime("%d-%m-%y %H:%M")
         self.prestamo.modificar_prestamo({
                 'id_prestamo': id_prestamo
             }, {
@@ -67,7 +89,7 @@ class Prestamo_controller:
 
     def rechazar_solicitud(self, id_prestamo, id_administrador):
         hoy = datetime.now()
-        fecha_prest = hoy.strftime("%Y-%m-%d %H:%M")
+        fecha_prest = hoy.strftime("%d-%m-%y %H:%M")
         self.prestamo.modificar_prestamo({
                 'id_prestamo': id_prestamo
             }, {
@@ -83,14 +105,13 @@ class Prestamo_controller:
 
     def devolver_prestamo(self, id_prestamo, id_administrador):
         hoy = datetime.now()
-        fecha_devol = hoy.strftime("%Y-%m-%d %H:%M")       
+        fecha_devol = hoy.strftime("%d-%m-%y %H:%M")       
         self.prestamo.modificar_prestamo({
                 'id_prestamo': id_prestamo
             }, {
                 'id_administrador': id_administrador,
                 'id_estado_prestamo': 4,
-                'fecha_devolucion': fecha_devol
-                
+                'fecha_devolucion': fecha_devol                
             })
         print('''
             ========================
@@ -102,14 +123,59 @@ class Prestamo_controller:
         id_estado_a = 2
         seguimiento_prestamo = self.prestamo.buscar_prestamos({'id_estado_prestamo': id_estado_a})
         print('''
-
-
                 =============================================
-                    Solicitudes aprobadas en seguimiento
+                    Préstamos sin devolución
                 =============================================
         ''')
         print(print_table(seguimiento_prestamo, ['ID', 'Id_Lector', 'Id_Libro', 'Fecha solicitud', 'Id_administrador', 'Fecha prestamo', 'Plazo', 'Fecha devolución', 'Id_estado']))
+        id_prest_dev = input_data("Ingrese el ID del prestamo a devolver >> ")
+        solicitud = self.prestamo.obtener_prestamo({'id_prestamo' : id_prest_dev})
+        print(print_table(solicitud,['ID', 'Id_Lector', 'Id_Libro', 'Fecha solicitud', 'Id_administrador', 'Fecha prestamo', 'Plazo', 'Fecha devolución', 'Id_estado']))
+        if pregunta(f"¿Desea cambiar al estado devuelto?"):
+            self.devolver_prestamo(id_prest_dev, id_administrador)
+            print(f'''
+                =========================================================
+                    Préstamo devuelto con ID : {solicitud[0]}
+                =========================================================
+            ''')
+        else:
+            input("\nNo se realizó ninguna acción. Presione una tecla para continuar...")
 
-
-    def historial_solicitudes_lector(self):
-        pass
+    def historial_solicitudes_lector(self, id_lector):
+        print('''
+        ================================
+            Historial de solicitudes
+        ================================
+        ''')
+        historial_impr = []
+        historial_prest = self.prestamo.buscar_prestamos({'id_lector': id_lector})        
+        if historial_prest:
+            for v in historial_prest:
+                id_prest = v[0]
+                id_lect = v[1]
+                id_lib = v[2]
+                fecha_sol = v[3]
+                id_estado = v[8]
+                nomb_lec = self.persona.obtener_persona({
+                    'id_persona': id_lect
+                })
+                if not nomb_lec:
+                    nomb_lec = ''                
+                nomb_lib = self.libros.obtener_libro({
+                    'id_libro': id_lib
+                })
+                if not nomb_lib:
+                    nomb_lib = ''
+                nomb_estado = self.estado_prest.obtener_estado_prestamo({
+                    'id_estado': id_estado
+                })
+                if not nomb_estado:
+                    nomb_estado = ''
+                historial_impr.append({
+                        'ID': id_prest,
+                        'Lector': nomb_lec[1] + " " + nomb_lec[2],
+                        'Libro': nomb_lib[1],
+                        'Fecha Solicitud': fecha_sol,
+                        'Estado': nomb_estado[1]
+                })
+            print(print_table(historial_impr))
