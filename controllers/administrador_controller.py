@@ -62,6 +62,7 @@ class Administrador_controller:
             ''')
             return id_admin
         else:
+            print('\nPor favor de ingresar una persona como administrador. Gracias 😄😄 \n')
             self.inscribir_personas()
             
 

@@ -1,13 +1,17 @@
 from classes.categoria import Categoria
 from classes.libros import Libro
+from classes.prestamos import Prestamos
 from controllers.categoria_controller import Categoria_controller
 from helpers.helper import input_data, print_table, pregunta
 from helpers.menu import Menu
+from datetime import datetime
+
 
 class Libro_controller:
     def __init__(self):
         self.categoria = Categoria()
         self.libro = Libro()
+        self.prestamo = Prestamos()
         self.categoria_controlador = Categoria_controller()
         
     def menu(self):
@@ -42,17 +46,35 @@ class Libro_controller:
             Lista de Libros
         ========================
         ''')
-        libro = self.libro.obtener_libros('id_libro')
+
         print(print_table(libro, ['ID', 'Libro','Autor','Categoria','Editorial','Año de edición','Stock']))
         input("\nPresione una tecla para continuar...")
 
     def insertar_libro(self):
         nombre_libro = input_data("Ingrese el nombre del libro >> ")
+        
         autor = input_data("Ingrese el nombre del autor del libro >> ")
+        
         self.categoria_controlador.listar_categorias()
+        
         id_categoria = input_data("Ingrese el código de la categoría >> ")
+        
         editorial = input_data("Ingrese el nombre de la editorial del libro >> ")
-        anio_edicion = input_data("Ingrese el año de edición del libro >> ")
+        
+
+        while True:
+
+            anio_edicion = input_data("Ingrese el año de edición del libro >> ",'int')
+
+            ahora = datetime.now()
+            anio = ahora.year
+
+            if anio_edicion >= 1000 and anio_edicion <= anio:
+                #anio_edicion = input_data("Ingrese el año de edición del libro >> ")
+                break
+            else:
+                print('Ingresar el año correcto del libro.')
+
         stock_libro = input_data("Ingrese la cantidad de libros >> ")
         # si no existe libro agregar pero si existe debe sumarse el stock
         self.libro.guardar_libro({

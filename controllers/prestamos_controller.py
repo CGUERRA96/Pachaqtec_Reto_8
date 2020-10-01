@@ -35,7 +35,7 @@ class Prestamo_controller:
                 ==============================
                 ''')
                 presentar = self.prestamo.obtener_prestamos('id_lector')
-                print(print_table(presentar))
+                print(print_table(presentar,['ID', 'Id_Lector', 'Id_Libro', 'Fecha solicitud', 'Id_administrador', 'Fecha prestamo', 'Plazo', 'Fecha devolución', 'Id_estado']))
                 break
             else:
                 if pregunta(f"¿Desea volver a intentar una búsqueda?"):

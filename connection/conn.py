@@ -6,7 +6,7 @@ class Conexion:
     def __init__(self, table_name):
         self.table_name = table_name
         self.db = connect(host='127.0.0.1', 
-                    user='postgres', password='Christian1304', database='sistema_biblioteca')
+                    user='postgres', password='123456', database='sistema_biblioteca')
         self.cursor = self.db.cursor()
 
 
@@ -31,6 +31,22 @@ class Conexion:
         query = f'SELECT * FROM {self.table_name} WHERE {" AND ".join(list_select_where)}'
         self.cursor.execute(query)
         return self.cursor.fetchall()
+
+    #def get_by_id_joins(self):
+    #    query = f'''
+    #    select lb.id_libro, lb.nombre, lb.autor, lb.id_categoria, lb.editorial, lb.anio_edicion
+    #    , (lb.stock_libro - isnull(tb.cantidad,0)) as Stock
+    #    from libros lb
+    #    left join (
+    #    select pr.id_libro, l.nombre as NombreLibro, count(1) as Cantidad
+    #    from prestamo pr
+    #    left join libros l on l.id_libro = pr.id_libro
+    #    where pr.id_estado_prestamo in (1,2)
+    #    group by pr.id_libro,l.nombre) tb on lb.id_libro = tb.id_libro
+    #    '''
+    #    self.cursor.execute(query)
+    #    return self.cursor.fetchall()
+
 
     def get_by_column_like(self, data):
         list_select_where = []
