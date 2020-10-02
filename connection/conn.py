@@ -6,7 +6,7 @@ class Conexion:
     def __init__(self, table_name):
         self.table_name = table_name
         self.db = connect(host='127.0.0.1', 
-                    user='postgres', password='123456', database='sistema_biblioteca')
+                    user='postgres', password='Christian1304', database='sistema_biblioteca')
         self.cursor = self.db.cursor()
 
 
@@ -23,6 +23,22 @@ class Conexion:
         query = f'SELECT * FROM {self.table_name} WHERE {"".join(map(str, id_object.keys()))} = {"".join(map(str, id_object.values()))}'
         self.cursor.execute(query)
         return self.cursor.fetchone()
+
+    def get_by_id_group(self, id_object):
+        query = f'SELECT {"".join(map(str, id_object.keys()))}, count({"".join(map(str, id_object.keys()))}) FROM {self.table_name} WHERE {"".join(map(str, id_object.keys()))} = {"".join(map(str, id_object.values()))} GROUP BY {"".join(map(str, id_object.keys()))}'
+        self.cursor.execute(query)
+        return self.cursor.fetchone()
+
+    def get_by_column_group(self, dataw, datag):
+        list_select_where = []        
+        for field_name, field_value in dataw.items():
+            list_select_where.append(f"{field_name} ='{field_value}'")
+        list_select_group = []
+        for field_name, field_value in datag.items():
+            list_select_group.append(f"{field_name}")
+        query = f'SELECT {", ".join(list_select_group)}, count(*) FROM {self.table_name} WHERE {" AND ".join(list_select_where)} GROUP BY {", ".join(list_select_group)}'
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
 
     def get_by_column(self, data):
         list_select_where = []

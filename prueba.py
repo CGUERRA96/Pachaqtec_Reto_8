@@ -1,15 +1,12 @@
-#Es necesario importar las depencendias necesarias
-from datetime import date
+from controllers.prestamos_controller import Prestamo_controller
 from datetime import datetime
+from helpers.menu import Menu
 
-#Día actual
-today = date.today()
+class Stock:
+    def __init__(self):
+        self.prestamo = Prestamo_controller()
 
-#Fecha actual
-now = datetime.now()
 
-fecha_ahora = now.strftime("%d-%m-%y %H:%M")
+prueba = Stock()
+prueba.prestamo.stock_prestado_libro(2)
 
-print(today)
-print(now)
-print(fecha_ahora)

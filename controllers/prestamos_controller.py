@@ -21,19 +21,23 @@ class Prestamo_controller:
             self.libro_controlador.buscar_libros_filtros_lector()
             if pregunta(f"¿Encontraste el libro que buscabas?"):
                 id_libro_seleccionado = input_data("Ingresa el ID del libro a solicitar >> ")
-                now = datetime.now()
-                fecha_ahora = now.strftime("%d-%m-%y %H:%M")
-                self.prestamo.guardar_prestamo({
-                    'id_lector'    :   id_lector_identificado,
-                    'id_libro'  :   id_libro_seleccionado,
-                    'fecha_solicitud' :   fecha_ahora,
-                    'id_estado_prestamo' : 1
-                })
-                print('''
-                ==============================
-                    Solicitud creada !!
-                ==============================
-                ''')
+                stock_i=self.stock_prestado_libro(id_libro_seleccionado) # stock prestado
+                stock_p=self.libro_controlador.stock_inicial_libro(id_libro_seleccionado) # stock inicial
+                stock_disponible = stock_i - stock_p
+                if stock_disponible:
+                    now = datetime.now()
+                    fecha_ahora = now.strftime("%d-%m-%y %H:%M")
+                    self.prestamo.guardar_prestamo({
+                        'id_lector'    :   id_lector_identificado,
+                        'id_libro'  :   id_libro_seleccionado,
+                        'fecha_solicitud' :   fecha_ahora,
+                        'id_estado_prestamo' : 1
+                    })
+                    print('''
+                    ==============================
+                        Solicitud creada !!
+                    ==============================
+                    ''')
                 presentar = self.prestamo.obtener_prestamos('id_lector')
                 print(print_table(presentar,['ID', 'Id_Lector', 'Id_Libro', 'Fecha solicitud', 'Id_administrador', 'Fecha prestamo', 'Plazo', 'Fecha devolución', 'Id_estado']))
                 break
@@ -179,3 +183,15 @@ class Prestamo_controller:
                         'Estado': nomb_estado[1]
                 })
             print(print_table(historial_impr))
+
+    def stock_prestado_libro(self, id_libro):
+        id_estado_0 = 2     
+        libro_stock_prestado = self.prestamo.obtener_stock_prestado_libro({'id_libro': id_libro,'id_estado_prestamo': id_estado_0},{'id_libro': id_libro})
+        print(print_table(libro_stock_prestado,['ID Libro','Stock Prestado']))
+        
+        for z in libro_stock_prestado:
+            stock_1 = z[1]
+     
+        print(stock_1)
+        return stock_1
+ 

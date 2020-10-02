@@ -10,6 +10,9 @@ class Prestamos:
     def obtener_prestamo(self, id_prestamo):
         return self.model.get_by_id(id_prestamo)
 
+    def obtener_stock_prestado_libro(self, dataw, grupo):
+        return self.model.get_by_column_group(dataw, grupo)
+
     def obtener_prestamos(self, order):
         return self.model.get_all(order)
 

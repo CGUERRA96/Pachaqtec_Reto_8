@@ -46,7 +46,7 @@ class Libro_controller:
             Lista de Libros
         ========================
         ''')
-
+        libro = self.libro.obtener_libros('id_libro')
         print(print_table(libro, ['ID', 'Libro','Autor','Categoria','Editorial','Año de edición','Stock']))
         input("\nPresione una tecla para continuar...")
 
@@ -191,3 +191,14 @@ class Libro_controller:
         ========================
         ''')
 
+    def stock_inicial_libro(self, id_libro):        
+        libro_stock_inicial = self.libro.obtener_libro({'id_libro': id_libro})
+        print(print_table(libro_stock_inicial,['ID', 'Libro','Autor','Categoria','Editorial','Año de edición','Stock']))
+        
+        for z in libro_stock_inicial:
+            stock_0 = z[6]
+     
+        print(stock_0)
+        return stock_0
+
+    

@@ -19,7 +19,7 @@ class Lector_controller:
         ========================
         ''')
         id_lector_1 = self.identificar_lector()
-        #id_lector_1
+        id_lector_1
         if id_lector_1:
             while True:            
                 try:
